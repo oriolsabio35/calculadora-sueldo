@@ -3,25 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculadora de Sueldo Neto 2026 - Barcelona y España</title>
+    <title>Calculadora de Sueldo Neto Pro 2026 - Desglose Avanzado</title>
     
-    <!-- METADATOS SEO PARA GOOGLE -->
-    <meta name="description" content="Calcula tu sueldo neto mensual al instante para 12 o 14 pagas. Simula tus retenciones de IRPF en Catalunya (Barcelona), Madrid y el resto de España.">
-    <meta name="keywords" content="calculadora sueldo neto, calcular sou net barcelona, irpf catalunya, nomina neto bruto, 12 o 14 pagas">
-    <meta name="author" content="Oriol Sabio">
+    <meta name="description" content="Calculadora de sueldo neto avanzada con desglose visual de IRPF, Seguridad Social y comparativa autonómica entre Catalunya, Madrid y España.">
+    <meta name="keywords" content="calculadora sueldo neto pro, calcular sou net barcelona, irpf catalunya comparativa">
 
-    <!-- METADATOS PARA REDES SOCIALES (WhatsApp, Twitter, etc.) -->
-    <meta property="og:title" content="Calculadora de Sueldo Neto al Instante">
-    <meta property="og:description" content="Descubre cuánto cobrarás neto en tu nómina con esta calculadora rápida y gratuita para 12 o 14 pagas.">
-    <meta property="og:type" content="website">
-
-    <!-- SCRIPT OFICIAL DE GOOGLE ADSENSE -->
+    <!-- SCRIPT DE GOOGLE ADSENSE -->
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7980697069039797" crossorigin="anonymous"></script>
 
     <style>
         :root {
             --primary: #4F46E5;
-            --bg: #F9FAFB;
+            --primary-dark: #4338CA;
+            --accent: #10B981;
+            --bg: #F3F4F6;
             --text: #1F2937;
             --card: #FFFFFF;
         }
@@ -36,77 +31,145 @@
             margin: 0;
             padding: 20px;
         }
+        .container {
+            max-width: 600px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
         .calculator-card {
             background-color: var(--card);
-            padding: 40px;
+            padding: 35px;
             border-radius: 20px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
-            max-width: 400px;
-            width: 100%;
-            margin-bottom: 30px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.06);
         }
         h1 {
-            font-size: 22px;
-            margin-bottom: 30px;
+            font-size: 24px;
+            margin-top: 0;
+            margin-bottom: 25px;
             text-align: center;
+            color: #111827;
+        }
+        .grid-inputs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
         }
         .input-group {
-            margin-bottom: 20px;
+            margin-bottom: 15px;
+        }
+        .input-group.full {
+            grid-column: span 2;
         }
         label {
             display: block;
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 600;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
             color: #4B5563;
         }
         input, select {
             width: 100%;
-            padding: 15px;
-            font-size: 18px;
+            padding: 12px 15px;
+            font-size: 16px;
             border: 2px solid #E5E7EB;
             border-radius: 10px;
             box-sizing: border-box;
             outline: none;
             transition: border-color 0.3s;
+            background-color: #FAFAFA;
         }
-        input:focus {
+        input:focus, select:focus {
             border-color: var(--primary);
+            background-color: #FFFFFF;
         }
         .result-box {
-            margin-top: 30px;
-            background-color: #EEF2FF;
+            margin-top: 25px;
+            background: linear-gradient(135deg, #EEF2FF 0%, #E0E7FF 100%);
             padding: 25px;
             border-radius: 15px;
             text-align: center;
             border: 1px solid #C7D2FE;
         }
         .result-title {
-            font-size: 14px;
-            color: var(--primary);
-            font-weight: bold;
+            font-size: 13px;
+            color: var(--primary-dark);
+            font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 1px;
         }
         .result-value {
-            font-size: 48px;
+            font-size: 42px;
             font-weight: 800;
             color: var(--primary);
-            margin: 10px 0 0 0;
+            margin: 8px 0 0 0;
         }
-        .details {
+        .result-sub {
+            font-size: 14px;
+            color: #4B5563;
+            margin-top: 5px;
+        }
+        
+        /* --- GRÁFICO VISUAL DE BARRAS (DIFERENCIAL) --- */
+        .breakdown-section {
+            background-color: var(--card);
+            padding: 25px;
+            border-radius: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.04);
+        }
+        .breakdown-title {
+            font-size: 15px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: #374151;
+        }
+        .bar-container {
+            display: flex;
+            height: 24px;
+            border-radius: 12px;
+            overflow: hidden;
+            background-color: #E5E7EB;
+            margin-bottom: 15px;
+        }
+        .bar-neto { background-color: var(--accent); transition: width 0.5s; }
+        .bar-irpf { background-color: #EF4444; transition: width 0.5s; }
+        .bar-ss { background-color: #F59E0B; transition: width 0.5s; }
+        
+        .legend {
+            display: flex;
+            justify-content: space-between;
             font-size: 12px;
             color: #6B7280;
-            margin-top: 15px;
-            text-align: center;
+            flex-wrap: wrap;
+            gap: 10px;
         }
-        /* --- ESTILOS DE MONETIZACIÓN --- */
-        .monetization-section {
-            max-width: 400px;
+        .legend-item { display: flex; align-items: center; gap: 6px; }
+        .dot { width: 10px; height: 10px; border-radius: 50%; }
+        .dot-neto { background-color: var(--accent); }
+        .dot-irpf { background-color: #EF4444; }
+        .dot-ss { background-color: #F59E0B; }
+
+        /* --- COMPARATIVA AUTONÓMICA --- */
+        .comparison-table {
             width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+        .comparison-table th, .comparison-table td {
+            padding: 10px 12px;
+            text-align: left;
+            border-bottom: 1px solid #E5E7EB;
+        }
+        .comparison-table th { color: #6B7280; font-weight: 600; }
+        .comparison-table td { font-weight: 700; color: #1F2937; }
+
+        /* --- MONETIZACIÓN --- */
+        .monetization-section {
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            gap: 15px;
         }
         .affiliate-box {
             background-color: #FFFBEB;
@@ -115,11 +178,7 @@
             border-radius: 15px;
             text-align: center;
         }
-        .affiliate-box h3 {
-            margin: 0 0 10px 0;
-            font-size: 16px;
-            color: #92400E;
-        }
+        .affiliate-box h3 { margin: 0 0 8px 0; font-size: 15px; color: #92400E; }
         .affiliate-btn {
             display: inline-block;
             background-color: #D97706;
@@ -128,110 +187,190 @@
             padding: 10px 20px;
             border-radius: 8px;
             font-weight: bold;
-            margin-top: 10px;
+            font-size: 14px;
+            margin-top: 8px;
             transition: background-color 0.3s;
         }
         .affiliate-btn:hover { background-color: #B45309; }
-        .donation-box {
-            text-align: center;
-        }
+        .donation-box { text-align: center; }
     </style>
 </head>
 <body>
 
-    <div class="calculator-card">
-        <h1>Calculadora de Sueldo Neto</h1>
+    <div class="container">
         
-        <div class="input-group">
-            <label for="bruto">Sueldo Bruto Anual (€)</label>
-            <input type="number" id="bruto" placeholder="Ej. 30000" oninput="calcularNeto()">
+        <!-- CALCULADORA PRINCIPAL -->
+        <div class="calculator-card">
+            <h1>Calculadora de Sueldo Neto Pro</h1>
+            
+            <div class="grid-inputs">
+                <div class="input-group full">
+                    <label for="bruto">Sueldo Bruto Anual (€)</label>
+                    <input type="number" id="bruto" value="30000" placeholder="Ej. 30000" oninput="calcularTodo()">
+                </div>
+
+                <div class="input-group">
+                    <label for="region">Comunidad / Región</label>
+                    <select id="region" onchange="calcularTodo()">
+                        <option value="catalunya">Catalunya (Barcelona)</option>
+                        <option value="madrid">Madrid</option>
+                        <option value="general">Resto de España</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label for="pagas">Número de pagas</label>
+                    <select id="pagas" onchange="calcularTodo()">
+                        <option value="12">12 pagas (Prorrateadas)</option>
+                        <option value="14" selected>14 pagas (Verano/Navidad)</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="result-box">
+                <div class="result-title">Tu Neto Mensual</div>
+                <div class="result-value"><span id="netoMensual">0</span> €</div>
+                <div class="result-sub">Neto Anual: <strong id="netoAnual">0</strong> €</div>
+            </div>
         </div>
 
-        <div class="input-group">
-            <label for="region">Comunidad / Región</label>
-            <select id="region" onchange="calcularNeto()">
-                <option value="catalunya">Catalunya (Barcelona, etc.)</option>
-                <option value="madrid">Madrid</option>
-                <option value="general">Resto de España</option>
-            </select>
+        <!-- DESGLOSE VISUAL (GRÁFICO DE BARRAS) -->
+        <div class="breakdown-section">
+            <div class="breakdown-title">Desglose de tu nómina anual</div>
+            
+            <div class="bar-container">
+                <div id="barNeto" class="bar-neto" style="width: 70%;"></div>
+                <div id="barIrpf" class="bar-irpf" style="width: 20%;"></div>
+                <div id="barSs" class="bar-ss" style="width: 10%;"></div>
+            </div>
+
+            <div class="legend">
+                <div class="legend-item"><div class="dot dot-neto"></div> Neto: <span id="valNeto">0 €</span></div>
+                <div class="legend-item"><div class="dot dot-irpf"></div> IRPF: <span id="valIrpf">0 €</span></div>
+                <div class="legend-item"><div class="dot dot-ss"></div> Seg. Social: <span id="valSs">0 €</span></div>
+            </div>
         </div>
 
-        <div class="input-group">
-            <label for="pagas">Número de pagas</label>
-            <select id="pagas" onchange="calcularNeto()">
-                <option value="12">12 pagas (Prorrateadas)</option>
-                <option value="14">14 pagas (Doble en verano y navidad)</option>
-            </select>
+        <!-- COMPARATIVA AUTONÓMICA INSTANTÁNEA -->
+        <div class="breakdown-section">
+            <div class="breakdown-title">Comparativa según Comunidad Autónoma</div>
+            <table class="comparison-table">
+                <tr>
+                    <th>Región</th>
+                    <th>Neto Anual Estimado</th>
+                    <th>Diferencia</th>
+                </tr>
+                <tr>
+                    <td>Catalunya (Barcelona)</td>
+                    <td id="compCat">0 €</td>
+                    <td id="diffCat" style="color: #6B7280;">-</td>
+                </tr>
+                <tr>
+                    <td>Madrid</td>
+                    <td id="compMad">0 €</td>
+                    <td id="diffMad" style="color: #6B7280;">-</td>
+                </tr>
+                <tr>
+                    <td>Resto de España</td>
+                    <td id="compGen">0 €</td>
+                    <td id="diffGen" style="color: #6B7280;">-</td>
+                </tr>
+            </table>
         </div>
 
-        <div class="result-box">
-            <div class="result-title">Tu Neto Mensual</div>
-            <div class="result-value"><span id="neto">0</span> €</div>
-        </div>
-        
-        <div class="details">
-             *Cálculo estimado aplicando cuota de Seguridad Social estándar y estimación de IRPF autonómico.
-        </div>
-    </div>
+        <!-- SECCIÓN DE MONETIZACIÓN -->
+        <div class="monetization-section">
+            <div class="affiliate-box">
+                <h3>¿Quieres rentabilizar tus ahorros mensuales?</h3>
+                <p style="font-size: 13px; color: #92400E; margin: 0 0 5px 0;">Compara las mejores cuentas remuneradas sin comisiones del mercado.</p>
+                <a href="#" class="affiliate-btn">Ver Cuentas Recomendadas</a>
+            </div>
 
-    <!-- SECCIÓN DE MONETIZACIÓN -->
-    <div class="monetization-section">
-        
-        <!-- 1. BLOQUE DE AFILIADOS -->
-        <div class="affiliate-box">
-            <h3>¿Quieres sacarle rentabilidad a tu nómina?</h3>
-            <p style="font-size: 14px; color: #B45309; margin-bottom:0;">Descubre las mejores cuentas remuneradas sin comisiones.</p>
-            <a href="#" class="affiliate-btn">Ver Cuentas Recomendadas</a>
-        </div>
-
-        <!-- 2. BLOQUE DE DONACIONES (Tu Ko-fi oficial) -->
-        <div class="donation-box">
-            <p style="font-size: 13px; color: #6B7280; margin-bottom: 8px;">¿Te ha sido útil esta calculadora?</p>
-            <a href='https://ko-fi.com/oriolsabio' target='_blank'><img height='36' style='border:0px;height:36px;' src='https://storage.ko-fi.com/cdn/kofi2.png?v=3' border='0' alt='Invítame a un café en ko-fi.com' /></a>
-        </div>
-
-        <!-- 3. BLOQUE DE ADSENSE -->
-        <div style="text-align: center; margin-top: 10px;">
-            <p style="font-size: 11px; color: #9CA3AF;">Publicidad</p>
-            <div style="width: 300px; height: 250px; background-color: #E5E7EB; border: 1px dashed #9CA3AF; margin: 0 auto; display: flex; align-items: center; justify-content: center; color: #6B7280; font-size: 12px;">
-                Espacio reservado para Banner de Google
+            <div class="donation-box">
+                <p style="font-size: 12px; color: #6B7280; margin-bottom: 6px;">¿Te ha resultado útil esta herramienta Pro?</p>
+                <a href='https://ko-fi.com/oriolsabio' target='_blank'><img height='34' style='border:0px;height:34px;' src='https://storage.ko-fi.com/cdn/kofi2.png?v=3' border='0' alt='Invítame a un café' /></a>
             </div>
         </div>
 
     </div>
 
     <script>
-        function calcularNeto() {
-            const brutoAnual = parseFloat(document.getElementById('bruto').value);
-            const netoDisplay = document.getElementById('neto');
-            const region = document.getElementById('region').value;
-            const numeroPagas = parseFloat(document.getElementById('pagas').value);
+        function calcularNetoPorRegion(bruto, regionKey) {
+            if (isNaN(bruto) || bruto <= 0) return { netoAnual: 0, ss: 0, irpf: 0 };
 
-            if (isNaN(brutoAnual) || brutoAnual <= 0) {
-                netoDisplay.innerText = "0";
-                return;
-            }
-
-            let baseCotizacion = brutoAnual;
+            let baseCotizacion = bruto;
             if (baseCotizacion > 56640) baseCotizacion = 56640;
             const ss = baseCotizacion * 0.0635;
 
             let irpfPorcentaje = 0;
-            if (brutoAnual < 15000) irpfPorcentaje = 0.02;
-            else if (brutoAnual < 25000) irpfPorcentaje = 0.12;
-            else if (brutoAnual < 35000) irpfPorcentaje = 0.16;
+            if (bruto < 15000) irpfPorcentaje = 0.02;
+            else if (bruto < 25000) irpfPorcentaje = 0.12;
+            else if (bruto < 35000) irpfPorcentaje = 0.16;
             else if (brutoAnual < 50000) irpfPorcentaje = 0.20;
             else irpfPorcentaje = 0.25;
 
-            if (region === 'catalunya') irpfPorcentaje += 0.015;
-            if (region === 'madrid') irpfPorcentaje -= 0.01;
+            // Ajustes regionales reales aproximados
+            if (regionKey === 'catalunya') irpfPorcentaje += 0.015;
+            if (regionKey === 'madrid') irpfPorcentaje -= 0.01;
 
-            const irpf = brutoAnual * irpfPorcentaje;
-            const netoAnual = brutoAnual - ss - irpf;
-            
-            const netoMensual = netoAnual / numeroPagas;
-            netoDisplay.innerText = netoMensual.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            const irpf = bruto * irpfPorcentaje;
+            const netoAnual = bruto - ss - irpf;
+
+            return { netoAnual, ss, irpf };
         }
+
+        function calcularTodo() {
+            const bruto = parseFloat(document.getElementById('bruto').value);
+            const regionSelect = document.getElementById('region').value;
+            const numeroPagas = parseFloat(document.getElementById('pagas').value);
+
+            if (isNaN(bruto) || bruto <= 0) {
+                document.getElementById('netoMensual').innerText = "0";
+                document.getElementById('netoAnual').innerText = "0";
+                return;
+            }
+
+            // Cálculo principal seleccionado
+            const resPrincipal = calcularNetoPorRegion(bruto, regionSelect);
+            const netoMensual = resPrincipal.netoAnual / numeroPagas;
+
+            document.getElementById('netoMensual').innerText = netoMensual.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            document.getElementById('netoAnual').innerText = resPrincipal.netoAnual.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+            // Actualizar Gráfico de barras visuales
+            const pNeto = (resPrincipal.netoAnual / bruto) * 100;
+            const pIrpf = (resPrincipal.irpf / bruto) * 100;
+            const pSs = (resPrincipal.ss / bruto) * 100;
+
+            document.getElementById('barNeto').style.width = pNeto + '%';
+            document.getElementById('barIrpf').style.width = pIrpf + '%';
+            document.getElementById('barSs').style.width = pSs + '%';
+
+            document.getElementById('valNeto').innerText = Math.round(resPrincipal.netoAnual).toLocaleString('es-ES') + ' €';
+            document.getElementById('valIrpf').innerText = Math.round(resPrincipal.irpf).toLocaleString('es-ES') + ' €';
+            document.getElementById('valSs').innerText = Math.round(resPrincipal.ss).toLocaleString('es-ES') + ' €';
+
+            // Comparativa Autónoma Simultánea
+            const resCat = calcularNetoPorRegion(bruto, 'catalunya');
+            const resMad = calcularNetoPorRegion(bruto, 'madrid');
+            const resGen = calcularNetoPorRegion(bruto, 'general');
+
+            document.getElementById('compCat').innerText = Math.round(resCat.netoAnual).toLocaleString('es-ES') + ' €';
+            document.getElementById('compMad').innerText = Math.round(resMad.netoAnual).toLocaleString('es-ES') + ' €';
+            document.getElementById('compGen').innerText = Math.round(resGen.netoAnual).toLocaleString('es-ES') + ' €';
+
+            // Diferencias respecto a la seleccionada
+            const baseComparacion = resPrincipal.netoAnual;
+            const diffCat = resCat.netoAnual - baseComparacion;
+            const diffMad = resMad.netoAnual - baseComparacion;
+
+            document.getElementById('diffCat').innerText = diffCat === 0 ? 'Base' : (diffCat > 0 ? '+' + Math.round(diffCat) + ' €' : Math.round(diffCat) + ' €');
+            document.getElementById('diffMad').innerText = diffMad === 0 ? 'Base' : (diffMad > 0 ? '+' + Math.round(diffMad) + ' €' : Math.round(diffMad) + ' €');
+            document.getElementById('diffGen').innerText = '-';
+        }
+
+        // Ejecutar al cargar
+        calcularTodo();
     </script>
 </body>
 </html>
