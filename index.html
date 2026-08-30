@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Calculadora de Sueldo Neto al Instante</title>
+    <!-- ESPACIO PARA EL SCRIPT DE GOOGLE ADSENSE (Sustituir 'tu-id' cuando te aprueben) -->
+    <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-tu-id" crossorigin="anonymous"></script> -->
     <style>
         :root {
             --primary: #4F46E5;
@@ -16,7 +18,7 @@
             background-color: var(--bg);
             color: var(--text);
             display: flex;
-            justify-content: center;
+            flex-direction: column; /* Añadido para apilar calculadora y monetización */
             align-items: center;
             min-height: 100vh;
             margin: 0;
@@ -29,6 +31,7 @@
             box-shadow: 0 10px 25px rgba(0,0,0,0.05);
             max-width: 400px;
             width: 100%;
+            margin-bottom: 30px; /* Separación con los anuncios */
         }
         h1 {
             font-size: 24px;
@@ -85,6 +88,41 @@
             margin-top: 15px;
             text-align: center;
         }
+        /* --- ESTILOS DE MONETIZACIÓN --- */
+        .monetization-section {
+            max-width: 400px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .affiliate-box {
+            background-color: #FFFBEB;
+            border: 1px solid #FDE68A;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+        }
+        .affiliate-box h3 {
+            margin: 0 0 10px 0;
+            font-size: 16px;
+            color: #92400E;
+        }
+        .affiliate-btn {
+            display: inline-block;
+            background-color: #D97706;
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: bold;
+            margin-top: 10px;
+            transition: background-color 0.3s;
+        }
+        .affiliate-btn:hover { background-color: #B45309; }
+        .donation-box {
+            text-align: center;
+        }
     </style>
 </head>
 <body>
@@ -107,20 +145,50 @@
         </div>
 
         <div class="input-group">
-            <label for="jornada">Tipo de contrato</label>
-            <select id="jornada" disabled>
-                <option>Jornada completa estándar (40h)</option>
+            <label for="pagas">Número de pagas</label>
+            <select id="pagas" onchange="calcularNeto()">
+                <option value="12">12 pagas (Prorrateadas)</option>
+                <option value="14">14 pagas (Doble en verano y navidad)</option>
             </select>
         </div>
 
         <div class="result-box">
-            <div class="result-title">Tu Neto Mensual (12 pagas)</div>
+            <div class="result-title">Tu Neto Mensual</div>
             <div class="result-value"><span id="neto">0</span> €</div>
         </div>
         
         <div class="details">
-            *Cálculo estimado aplicando cuota obrera de la Seguridad Social (6.35%) y estimación de IRPF según tramos autonómicos.
+             *Cálculo estimado aplicando cuota de Seguridad Social estándar y estimación de IRPF autonómico.
         </div>
+    </div>
+
+    <!-- SECCIÓN DE MONETIZACIÓN -->
+    <div class="monetization-section">
+        
+        <!-- 1. BLOQUE DE AFILIADOS (Recomendación financiera) -->
+        <div class="affiliate-box">
+            <h3>¿Quieres sacarle rentabilidad a tu nómina?</h3>
+            <p style="font-size: 14px; color: #B45309; margin-bottom:0;">Descubre las mejores cuentas remuneradas sin comisiones.</p>
+            <!-- Aquí pondrás tu enlace de afiliado cuando te registres en una red -->
+            <a href="#" class="affiliate-btn">Ver Cuentas Recomendadas</a>
+        </div>
+
+        <!-- 2. BLOQUE DE DONACIONES (Ejemplo con Ko-fi) -->
+        <div class="donation-box">
+            <p style="font-size: 13px; color: #6B7280; margin-bottom: 8px;">¿Te ha sido útil esta calculadora?</p>
+            <!-- Reemplaza el 'tucodigo' por el enlace real que te dé Ko-fi o BuyMeACoffee -->
+            <a href='https://ko-fi.com/tucodigo' target='_blank'><img height='36' style='border:0px;height:36px;' src='https://storage.ko-fi.com/cdn/kofi2.png?v=3' border='0' alt='Invítame a un café en ko-fi.com' /></a>
+        </div>
+
+        <!-- 3. BLOQUE DE ADSENSE (Banner cuadrado inferior) -->
+        <div style="text-align: center; margin-top: 10px;">
+            <p style="font-size: 11px; color: #9CA3AF;">Publicidad</p>
+            <!-- Aquí pegarás el bloque <div> de anuncios que te dará AdSense -->
+            <div style="width: 300px; height: 250px; background-color: #E5E7EB; border: 1px dashed #9CA3AF; margin: 0 auto; display: flex; align-items: center; justify-content: center; color: #6B7280; font-size: 12px;">
+                Espacio reservado para Banner de Google
+            </div>
+        </div>
+
     </div>
 
     <script>
@@ -128,18 +196,17 @@
             const brutoAnual = parseFloat(document.getElementById('bruto').value);
             const netoDisplay = document.getElementById('neto');
             const region = document.getElementById('region').value;
+            const numeroPagas = parseFloat(document.getElementById('pagas').value);
 
             if (isNaN(brutoAnual) || brutoAnual <= 0) {
                 netoDisplay.innerText = "0";
                 return;
             }
 
-            // Descuento Seguridad Social (aprox 6.35%)
             let baseCotizacion = brutoAnual;
-            if (baseCotizacion > 56640) baseCotizacion = 56640; // Tope máximo 2024
+            if (baseCotizacion > 56640) baseCotizacion = 56640;
             const ss = baseCotizacion * 0.0635;
 
-            // Estimación muy simplificada de IRPF para el prototipo
             let irpfPorcentaje = 0;
             if (brutoAnual < 15000) irpfPorcentaje = 0.02;
             else if (brutoAnual < 25000) irpfPorcentaje = 0.12;
@@ -147,17 +214,13 @@
             else if (brutoAnual < 50000) irpfPorcentaje = 0.20;
             else irpfPorcentaje = 0.25;
 
-            // Ajuste por comunidad (simplificado para el ejemplo)
-            if (region === 'catalunya') irpfPorcentaje += 0.015; // Tramos autonómicos ligeramente superiores
+            if (region === 'catalunya') irpfPorcentaje += 0.015;
             if (region === 'madrid') irpfPorcentaje -= 0.01;
 
             const irpf = brutoAnual * irpfPorcentaje;
             const netoAnual = brutoAnual - ss - irpf;
             
-            // Calculamos en 12 pagas
-            const netoMensual = netoAnual / 12;
-
-            // Mostramos el resultado formateado
+            const netoMensual = netoAnual / numeroPagas;
             netoDisplay.innerText = netoMensual.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
         }
     </script>
